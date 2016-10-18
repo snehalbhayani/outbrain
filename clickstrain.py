@@ -10,6 +10,7 @@ import pandas as pd
 import numpy as np
 
 
+DEFAULT_PATH_TO_DATA = 'outbrainclick/'
 def get_store():
     return pd.HDFStore('database')
 
@@ -22,7 +23,7 @@ def put_into_HDFStore(table, chunk_size):
         store.remove(table)
     except Exception:
         pass
-    for chunk in pd.read_csv(table+'.csv', chunksize = chunk_size):
+    for chunk in pd.read_csv(DEFAULT_PATH_TO_DATA + table+'.csv', chunksize = chunk_size):
         print(chunk.shape[0])
         store.append(table, chunk, data_columns = chunk.columns.values)
     #close the store
