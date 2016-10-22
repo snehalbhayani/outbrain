@@ -4,6 +4,15 @@ import numpy as np
 import sqlite3 as sl
 from clickstrain import get_data_by_where_clause as gdid
 
+#==============================================================================
+# TASKS:
+# 1. Find similarity between two ads
+# 2. Find similarity between two documents
+# 3. Given two documents, find the most common ad between them
+#==============================================================================
+
+
+
 document_id = 1711431
 #==============================================================================
 events= gdid('events', 'document_id='+str(document_id))
