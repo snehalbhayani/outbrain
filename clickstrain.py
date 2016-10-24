@@ -14,7 +14,7 @@ import sqlite3 as sl
 
 DEFAULT_PATH_TO_DATA = 'outbrainclick/'
 DATABASE_NAME = 'database.db'
-def get_store():
+def get_store(store = None):
     return pd.HDFStore(DATABASE_NAME)
 
 def close_store(store):
@@ -34,6 +34,18 @@ def put_into_HDFStore(table, chunk_size):
         store.append(table, chunk, data_columns = chunk.columns.values)
     #close the store
     close_store(store)
+
+def prepare_table(table):
+    store = get_store()
+    try:
+        store.remove(table)
+    except:
+        pass
+        #Do something
+def put_chunk_intoHDFStore(table, chunk):    
+    store = get_store()
+    store.append(table, chunk, data_columns = chunk.columns.values)
+#    close_store(store)
     
 def put_into_sqlite(table, chunk_size):
     conn = sl.connect('sqldatabase.db')    
@@ -51,12 +63,12 @@ def put_into_sqlite(table, chunk_size):
 def get_data_by_id(table, field, value):
     return pd.get_data_by_where_clause(table, field+ '='+ value)
     
-def get_data_by_where_clause(table, where_clause):
+def get_data_by_where_clause(table, where_clause, **kwargs):
     store = get_store()
     if where_clause:
-        result = pd.read_hdf(DATABASE_NAME, table, where=where_clause)
+        result = pd.read_hdf(DATABASE_NAME, table, where=where_clause, **kwargs)
     else:
-        result = pd.read_hdf(DATABASE_NAME, table)
+        result = pd.read_hdf(DATABASE_NAME, table, **kwargs)
     close_store(store)
     return result
     
